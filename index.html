@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conta Gol Calcetto</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="team">
+            <div class="score-box red-bg" id="score-box-a">
+                <span class="total-goals" id="total-goals-a">0</span>
+            </div>
+            <button class="add-player-button" onclick="addPlayer('A')">Aggiungi Giocatore</button>
+            <ul class="player-list" id="player-list-a"></ul>
+        </div>
+
+        <!-- Pulsante "Inverti Colori" tra i due quadrati -->
+        <button class="invert-colors-button" onclick="invertColors()">Inverti Colori</button>
+
+        <div class="team">
+            <div class="score-box blue-bg" id="score-box-b">
+                <span class="total-goals" id="total-goals-b">0</span>
+            </div>
+            <button class="add-player-button" onclick="addPlayer('B')">Aggiungi Giocatore</button>
+            <ul class="player-list" id="player-list-b"></ul>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

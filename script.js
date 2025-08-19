@@ -6,6 +6,12 @@ document.addEventListener('DOMContentLoaded', () => {
   loadPlayers('A');
   loadPlayers('B');
   updateTotalGoals();
+
+  // Carica stato inversione colori e applicalo se era invertito
+  const savedInversion = localStorage.getItem('colorsInverted');
+  if (savedInversion === 'true') {
+    invertColors(); // porta blu a sinistra e rosso a destra
+  }
 });
 
 /* ================= Utils ================= */
@@ -88,7 +94,7 @@ function editPlayer(team, oldName) {
       const goalCountElement = item.querySelector('.goal-count');
       goalCountElement.id = `goals-${team}-${safeId(newName)}`;
 
-      // *** FIX 1: aggiorna TUTTI gli onclick di questo giocatore col nuovo nome ***
+      // *** aggiorna TUTTI gli onclick di questo giocatore col nuovo nome ***
       const goalButtons = item.querySelectorAll('.goal-button'); // [+, -]
       if (goalButtons[0]) goalButtons[0].setAttribute('onclick', `changeGoals('${team}', 'add', '${newName}')`);
       if (goalButtons[1]) goalButtons[1].setAttribute('onclick', `changeGoals('${team}', 'subtract', '${newName}')`);
@@ -163,7 +169,7 @@ function renameAssistItem(team, oldName, newName) {
       const countEl = item.querySelector('.assist-count');
       countEl.id = `assists-${team}-${safeId(newName)}`;
 
-      // *** FIX 2: aggiorna gli onclick dei pulsanti assist col nuovo nome ***
+      // aggiorna gli onclick dei pulsanti assist col nuovo nome
       const assistButtons = item.querySelectorAll('.assist-button'); // [+, -]
       if (assistButtons[0]) assistButtons[0].setAttribute('onclick', `changeAssists('${team}', 'add', '${newName}')`);
       if (assistButtons[1]) assistButtons[1].setAttribute('onclick', `changeAssists('${team}', 'subtract', '${newName}')`);
@@ -285,11 +291,12 @@ function savePlayers() {
   localStorage.setItem('totalGoalsB', totalGoalsB);
 }
 
-/* ================= Extra: inverti colori (come avevi) ================= */
+/* ================= Inverti colori con persistenza ================= */
 function invertColors() {
   const scoreBoxA = document.getElementById('score-box-a');
   const scoreBoxB = document.getElementById('score-box-b');
 
+  // Inverti i colori di sfondo
   const currentColorA = scoreBoxA.classList.contains('red-bg') ? 'red' : 'blue';
   const currentColorB = scoreBoxB.classList.contains('blue-bg') ? 'blue' : 'red';
 
@@ -298,8 +305,13 @@ function invertColors() {
   scoreBoxB.classList.toggle('red-bg', currentColorB === 'blue');
   scoreBoxB.classList.toggle('blue-bg', currentColorB === 'red');
 
+  // Aggiorna i colori dei numeri (facoltativo)
   const totalGoalsAEl = document.getElementById('total-goals-a');
   const totalGoalsBEl = document.getElementById('total-goals-b');
   totalGoalsAEl.classList.toggle('white', currentColorA === 'blue');
   totalGoalsBEl.classList.toggle('white', currentColorB === 'red');
+
+  // Salva lo stato nel localStorage: true se A è blu (inversione attiva)
+  const isInverted = scoreBoxA.classList.contains('blue-bg');
+  localStorage.setItem('colorsInverted', isInverted ? 'true' : 'false');
 }

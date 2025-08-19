@@ -1,16 +1,19 @@
 /* Struttura base */
 body {
   display: flex;
-  flex-direction: column;   /* disposizione verticale dei blocchi */
-  align-items: center;      /* centra i contenitori in orizzontale */
-  min-height: 100vh;        /* permette alla pagina di crescere in altezza */
+  flex-direction: column;   /* impila solo i blocchi verticali (gol sopra, assist sotto) */
+  align-items: center;
+  min-height: 100vh;
   margin: 0;
   font-family: Arial, sans-serif;
   background-color: #f4f4f9;
 }
 
+/* --- Box GOL --- */
 .container {
   display: flex;
+  flex-direction: row;      /* SEMPRE due colonne (A | B) */
+  gap: 10px;
   width: 80%;
   max-width: 800px;
   border-radius: 10px;
@@ -18,13 +21,13 @@ body {
   background-color: #fff;
   align-items: flex-start;
   margin-top: 20px;
-  gap: 10px;
 }
 
 .team {
-  flex: 1;
+  flex: 1 1 50%;
   padding: 20px;
   text-align: center;
+  min-width: 0;            /* evita overflow su schermi stretti */
 }
 
 .score-box {
@@ -108,6 +111,7 @@ body {
 
 /* Pulsante inverti colori */
 .invert-colors-button {
+  align-self: center;
   margin: 20px;
   padding: 8px 16px;
   font-size: 12px;
@@ -121,17 +125,24 @@ body {
 }
 .invert-colors-button:hover { background-color: #0056b3; }
 
-/* --- Sezione Assist --- */
+/* --- Box ASSIST (sotto) --- */
 .assist-container {
   display: flex;
+  flex-direction: row;      /* SEMPRE due colonne (Assist A | Assist B) */
+  gap: 10px;
   width: 80%;
   max-width: 800px;
   margin: 16px auto 24px;
   border-radius: 10px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
   background-color: #fff;
-  gap: 10px;
   padding: 10px 0;
+}
+
+.assist-container .team {
+  flex: 1 1 50%;
+  padding: 20px;
+  min-width: 0;
 }
 
 .assist-list {
@@ -168,7 +179,7 @@ body {
   margin: 0 6px;
 }
 
-/* Bottoni assist (lievemente diversi per distinguerli) */
+/* Bottoni assist (leggermente diversi per distinguerli) */
 .assist-button {
   padding: 4px 8px;
   font-size: 14px;
@@ -181,11 +192,20 @@ body {
 }
 .assist-button:hover { background-color: #5a6268; }
 
-/* Responsive */
+/* --- Responsive: resta sempre a due colonne --- */
 @media (max-width: 820px) {
   .container,
   .assist-container {
     width: 95%;
-    flex-direction: column; /* su tablet/smartphone vanno uno sotto l'altro */
+    flex-direction: row;    /* NON andare in colonna */
+  }
+  .container .team,
+  .assist-container .team {
+    flex: 1 1 50%;
+    min-width: 0;
+  }
+  .invert-colors-button {
+    align-self: center;
+    margin: 20px 8px;
   }
 }
